@@ -1,4 +1,14 @@
 package com.example.chatapp.settings
 
-class SettingsIntent {
+sealed class SettingsIntent {
+
+    object LoadData: SettingsIntent()
+
+    object OpenChangePicture: SettingsIntent()
+
+    object OpenColor: SettingsIntent()
+
+    object OpenStatus: SettingsIntent()
+
+    object OpenChangeName: SettingsIntent()
 }
