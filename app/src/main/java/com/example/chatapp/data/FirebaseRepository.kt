@@ -120,4 +120,21 @@ class FirebaseRepository @Inject constructor() {
             })
         }
     }
+
+    fun changeColor(color: String): Observable<Boolean>{
+        val userId = currentUser?.uid
+        val currentDabaseUser = databaseUsers.child(userId!!)
+
+        return Observable.create {emitter ->
+            currentDabaseUser.child("color").setValue(color).addOnCompleteListener {
+                    task: Task<Void> ->
+
+                if(task.isSuccessful){
+                    emitter.onNext(true)
+                }else{
+                    emitter.onNext(false)
+                }
+            }
+        }
+    }
 }
