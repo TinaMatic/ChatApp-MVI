@@ -1,15 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkBg"
     tools:context=".settings.SettingsActivity">
 
-    <TextView
+    <ProgressBar
+        android:id="@+id/progressBarSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings screen "/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"/>
 
-</RelativeLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/settingsProfileID"
+        android:layout_width="155dp"
+        android:layout_height="129dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/tvSettingsDisplayName"
+        android:layout_width="176dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/display_name"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsProfileID" />
+
+    <TextView
+        android:id="@+id/tvSettingsStatus"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="12dp"
+        android:text="Hey I'm happy"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSettingsDisplayName" />
+
+    <Button
+        android:id="@+id/btnSettingsChangeImage"
+        android:layout_width="239dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/bt_shape"
+        android:stateListAnimator="@drawable/state_list_animator_z"
+        android:text="@string/change_pic"
+        android:textColor="#d3d3d3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSettingsStatus" />
+
+    <Button
+        android:id="@+id/btnSettingsChangeColors"
+        android:layout_width="239dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bt_shape"
+        android:stateListAnimator="@drawable/state_list_animator_z"
+        android:text="@string/change_color"
+        android:textColor="#d3d3d3"
+        app:layout_constraintBottom_toTopOf="@+id/btnSettingsChangeStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSettingsChangeImage"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnSettingsChangeStatus"
+        android:layout_width="239dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bt_shape"
+        android:stateListAnimator="@drawable/state_list_animator_z"
+        android:text="@string/change_status"
+        android:textColor="#d3d3d3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSettingsChangeColors" />
+
+    <Button
+        android:id="@+id/btnSettingsChangeName"
+        android:layout_width="239dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bt_shape"
+        android:stateListAnimator="@drawable/state_list_animator_z"
+        android:text="Change Name"
+        android:textColor="#d3d3d3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSettingsChangeStatus" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
