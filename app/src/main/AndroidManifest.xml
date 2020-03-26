@@ -15,14 +15,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".name.NameActivity"></activity>
-        <activity android:name=".status.StatusActivity" />
+
+        <activity android:name=".status.StatusActivity"
+            android:parentActivityName=".settings.SettingsActivity"/>
+
         <activity android:name=".color.ColorActivity"
             android:parentActivityName=".settings.SettingsActivity"/>
+
         <activity android:name=".settings.SettingsActivity"
             android:parentActivityName=".dashboard.DashboardActivity"/>
+
         <activity android:name=".createAccount.CreateAccountActivity" />
+
         <activity android:name=".dashboard.DashboardActivity" />
+
         <activity android:name=".login.LoginActivity" />
+
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

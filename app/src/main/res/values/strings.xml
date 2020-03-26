@@ -34,4 +34,9 @@
     <!--    Color change screen-->
     <string name="successful_color_change">Color was successfully changed to </string>
     <string name="error_color_change">Color was NOT changed to </string>
+
+    <!--    Status change screen-->
+    <string name="successful_status_change">Status updated successfully</string>
+    <string name="error_status_change">Status NOT updated</string>
+
 </resources>

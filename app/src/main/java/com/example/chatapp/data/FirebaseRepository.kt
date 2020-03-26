@@ -1,8 +1,5 @@
 package com.example.chatapp.data
 
-import android.content.Intent
-import android.text.BoringLayout
-import android.widget.Toast
 import com.example.chatapp.models.Users
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -12,7 +9,6 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Observable
-import java.util.function.BiPredicate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -123,10 +119,10 @@ class FirebaseRepository @Inject constructor() {
 
     fun changeColor(color: String): Observable<Boolean>{
         val userId = currentUser?.uid
-        val currentDabaseUser = databaseUsers.child(userId!!)
+        val currentDatabaseUser = databaseUsers.child(userId!!)
 
         return Observable.create {emitter ->
-            currentDabaseUser.child("color").setValue(color).addOnCompleteListener {
+            currentDatabaseUser.child("color").setValue(color).addOnCompleteListener {
                     task: Task<Void> ->
 
                 if(task.isSuccessful){
@@ -135,6 +131,24 @@ class FirebaseRepository @Inject constructor() {
                     emitter.onNext(false)
                 }
             }
+        }
+    }
+
+    fun changeStatus(status: String): Observable<Boolean>{
+        val userId = currentUser?.uid
+        val currentDatabaseUser = databaseUsers.child(userId!!)
+
+        return Observable.create<Boolean> {emitter ->
+            currentDatabaseUser.child("status")
+                .setValue(status).addOnCompleteListener {
+                        task: Task<Void> ->
+                    if(task.isSuccessful){
+                        emitter.onNext(true)
+                    }
+                    else{
+                        emitter.onNext(false)
+                    }
+                }
         }
     }
 }
