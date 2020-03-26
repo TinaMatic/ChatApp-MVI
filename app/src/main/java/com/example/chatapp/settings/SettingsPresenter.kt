@@ -18,7 +18,7 @@ class SettingsPresenter @Inject constructor(val interactor: SettingsInteractor,
 
         currentState = SettingsViewState()
 
-        val initalState = intent(SettingsView::loadInitalData).switchMap {
+        val initialState = intent(SettingsView::loadInitalData).switchMap {
             interactor.loadData()
         }
 
@@ -27,7 +27,7 @@ class SettingsPresenter @Inject constructor(val interactor: SettingsInteractor,
         }
 
 
-        val viewState = Observable.merge(initalState, changeImage)
+        val viewState = Observable.merge(initialState, changeImage)
             .scan(currentState, this::stateReducer)
 //            initalState.scan(currentState, this::stateReducer)
 
