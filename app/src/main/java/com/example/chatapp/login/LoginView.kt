@@ -7,7 +7,7 @@ interface LoginView: MvpView {
      /**
       *Screen start intent for setting initial UI
       */
-    fun loadPageIntent(): Observable<LoginIntent.LoadPage>
+    fun loadPageIntent(): Observable<Unit>
 
     /**
      * Login user

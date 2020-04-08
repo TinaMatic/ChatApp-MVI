@@ -54,7 +54,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/selector_bg_edit_2"
                     android:textSize="15sp"
-                    android:hint="Status..."
+                    android:hint="Enter new status"
                     android:inputType="text"
                     android:textColor="#f0f7f4"
                     android:textCursorDrawable="@drawable/bg_input_cursor_2"

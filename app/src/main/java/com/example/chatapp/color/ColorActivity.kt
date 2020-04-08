@@ -1,10 +1,14 @@
 package com.example.chatapp.color
 
+import android.app.Activity
+import android.app.Instrumentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.chatapp.ChatAppApplication
 import com.example.chatapp.R
+import com.example.chatapp.coordinator.Navigator
+import com.example.chatapp.coordinator.SettingsCoordinator
 import com.hannesdorfmann.mosby3.mvi.MviActivity
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.subjects.PublishSubject
@@ -16,11 +20,22 @@ class ColorActivity : MviActivity<ColorView, ColorPresenter>(), ColorView {
     @Inject
     lateinit var interactor: ColorInteractor
 
+    @Inject
+    lateinit var navigator: Navigator
+
+    @Inject
+    lateinit var settingsCoordinator: SettingsCoordinator
+
     override val changeColor: PublishSubject<ColorIntent.ChangeColor> = PublishSubject.create()
+
+    override fun createPresenter(): ColorPresenter {
+        return ColorPresenter(interactor, settingsCoordinator::openSettings)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as ChatAppApplication).getChatAppComponent().inject(this)
         super.onCreate(savedInstanceState)
+        navigator.activity = this
         setContentView(R.layout.activity_color)
 
         supportActionBar?.title = "Choose a color"
@@ -51,10 +66,6 @@ class ColorActivity : MviActivity<ColorView, ColorPresenter>(), ColorView {
         }
     }
 
-    override fun createPresenter(): ColorPresenter {
-        return ColorPresenter(interactor)
-    }
-
     override fun render(state: ColorViewState) {
         if(!state.successfulMessage.isNullOrEmpty()){
             Toast.makeText(this, state.successfulMessage, Toast.LENGTH_SHORT).show()
@@ -63,5 +74,10 @@ class ColorActivity : MviActivity<ColorView, ColorPresenter>(), ColorView {
         if(!state.errorMessage.isNullOrEmpty()){
             Toast.makeText(this, state.errorMessage, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 }

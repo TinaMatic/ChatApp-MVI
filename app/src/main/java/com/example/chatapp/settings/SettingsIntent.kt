@@ -1,14 +1,9 @@
 package com.example.chatapp.settings
 
+import android.graphics.Bitmap
+import android.net.Uri
+
 sealed class SettingsIntent {
 
-    object LoadData: SettingsIntent()
-
-    object OpenChangePicture: SettingsIntent()
-
-    object OpenColor: SettingsIntent()
-
-    object OpenStatus: SettingsIntent()
-
-    object OpenChangeName: SettingsIntent()
+    data class ChangePicture(val resultUri: Uri?): SettingsIntent()
 }

@@ -8,7 +8,7 @@ interface CreateAccountView: MvpView {
     /**
     *Screen start intent for setting initial UI
     */
-    fun loadPage(): Observable<CreateAccountIntent.LoadPage>
+    fun loadPage(): Observable<Unit>
 
     /**
      * create new account

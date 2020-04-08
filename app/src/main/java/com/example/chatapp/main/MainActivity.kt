@@ -11,6 +11,7 @@ import com.example.chatapp.coordinator.LoginCoordinator
 import com.example.chatapp.coordinator.Navigator
 import com.example.chatapp.createAccount.CreateAccountActivity
 import com.example.chatapp.dashboard.DashboardActivity
+import com.example.chatapp.data.FirebaseRepository
 import com.example.chatapp.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -36,19 +37,28 @@ class MainActivity : MviActivity<MainView, MainPresenter>(), MainView {
     @Inject
     lateinit var navigator: Navigator
 
+    @Inject
+    lateinit var firebaseRepository: FirebaseRepository
+
 
     var mAuth: FirebaseAuth? = null
     var user: FirebaseUser? = null
     var mAuthListener: FirebaseAuth.AuthStateListener? = null
 
-    override fun loadPageIntent(): Observable<MainIntent.LoadPage> = Observable.just(MainIntent.LoadPage)
+    override fun loadPageIntent(): Observable<Unit> = Observable.fromCallable { Unit }
 
-    override fun openLogin(): Observable<MainIntent.OpenLogin> =
-        loginButtonMain.clicks().throttleFirst(500, TimeUnit.MILLISECONDS).map { MainIntent.OpenLogin }
+    override val isLoggedIn: PublishSubject<Unit> = PublishSubject.create()
 
-    override fun openCreateNewAccount(): Observable<MainIntent.OpenCreateNewProfile> = createActButton.clicks().map { MainIntent.OpenCreateNewProfile }
+    override fun openLogin(): Observable<Unit> =
+        loginButtonMain.clicks().throttleFirst(500, TimeUnit.MILLISECONDS)
 
-    override val openDashboard: PublishSubject<MainIntent.OpenDashboard> = PublishSubject.create()
+    override fun openCreateNewAccount(): Observable<Unit> = createActButton.clicks()
+
+    override val openDashboard: PublishSubject<Unit> = PublishSubject.create()
+
+    override fun createPresenter(): MainPresenter {
+        return MainPresenter(mainInteractor, mainCoordinator::openLogin, mainCoordinator::openCreateAccount, loginCoordinator::openDashboard)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as ChatAppApplication).getChatAppComponent().inject(this)
@@ -57,6 +67,8 @@ class MainActivity : MviActivity<MainView, MainPresenter>(), MainView {
 
         setContentView(R.layout.activity_main)
 
+        isLoggedIn.onNext(Unit)
+
         mAuth = FirebaseAuth.getInstance()
         mAuthListener = FirebaseAuth.AuthStateListener {
                 firebaseAuth: FirebaseAuth ->
@@ -64,11 +76,7 @@ class MainActivity : MviActivity<MainView, MainPresenter>(), MainView {
             user = firebaseAuth.currentUser
 
             if(user != null){
-                openDashboard.onNext(MainIntent.OpenDashboard)
-//                startActivity(Intent(this, DashboardActivity::class.java))
-//                finish()
-            }else{
-//                Toast.makeText(this, "Not Signed In", Toast.LENGTH_LONG).show()
+                openDashboard.onNext(Unit)
             }
         }
     }
@@ -80,14 +88,9 @@ class MainActivity : MviActivity<MainView, MainPresenter>(), MainView {
 
     override fun onStop() {
         super.onStop()
-
         if(mAuth != null){
             mAuth!!.removeAuthStateListener(mAuthListener!!)
         }
-    }
-
-    override fun createPresenter(): MainPresenter {
-        return MainPresenter(mainInteractor, mainCoordinator::openLogin, mainCoordinator::openCreateAccount, loginCoordinator::openDashboard)
     }
 
     override fun render(state: MainViewState) {
@@ -97,13 +100,9 @@ class MainActivity : MviActivity<MainView, MainPresenter>(), MainView {
         }else{
             progressBarMain.visibility = View.INVISIBLE
         }
-
-        if (!state.loginMessage.isNullOrEmpty() || user == null){
+        if (!state.loginMessage.isNullOrEmpty()){
             Toast.makeText(this, state.loginMessage, Toast.LENGTH_SHORT).show()
         }
 
-//        if(state.showCreateAccount){
-//            startActivity(Intent(this, CreateAccountActivity::class.java))
-//        }
     }
 }

@@ -24,29 +24,19 @@ class LoginPresenter @Inject constructor(val interactor: LoginInteractor,
         val loginUser = intent(LoginView::login)
             .switchMap {
                 interactor.loginUser(it.email, it.password)
-            }
-            .doOnNext {
-                if(it is LoginPartialState.LoginSuccess){
-                    openDashboardScreenCallback!!()
-                }
-            }
-
-//        val sharedState = loginUser.share()
+            }.share()
 
         val viewStates = loginUser
             .scan(currentState, this::stateReducer)
-//            .observeOn(AndroidSchedulers.mainThread())
-
 
         subscribeViewState(viewStates, LoginView::render)
 
-        //callback imace loginSuccess
-//        compositeDisposable.add(loginUser.filter {state->
-//            state is LoginPartialState.LoginSuccess
-//        }.subscribe ({ openDashboardScreenCallback!!() }
-//            ,{
-//            Log.d("Error opening dashboard", it.toString())
-//        }))
+        compositeDisposable.add(loginUser.filter {state->
+            state is LoginPartialState.LoginSuccess
+        }.subscribe ({ openDashboardScreenCallback!!() }
+            ,{
+            Log.d("Error opening dashboard", it.toString())
+        }))
     }
 
      private fun stateReducer(previousState: LoginViewState, partialState: LoginPartialState): LoginViewState{
@@ -62,7 +52,7 @@ class LoginPresenter @Inject constructor(val interactor: LoginInteractor,
     }
 
     override fun unbindIntents() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
         openDashboardScreenCallback = null
     }
 }
