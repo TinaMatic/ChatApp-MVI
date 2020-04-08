@@ -4,7 +4,8 @@ import com.hannesdorfmann.mosby3.mvi.MviBasePresenter
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class ColorPresenter @Inject constructor(private val interactor: ColorInteractor): MviBasePresenter<ColorView, ColorViewState>() {
+class ColorPresenter @Inject constructor(private val interactor: ColorInteractor,
+                                         private var openSettingsScreenCallback:(() -> Unit)?): MviBasePresenter<ColorView, ColorViewState>() {
 
     lateinit var compositeDisposable: CompositeDisposable
 
@@ -18,11 +19,20 @@ class ColorPresenter @Inject constructor(private val interactor: ColorInteractor
         val colorChange = intent(ColorView::changeColor)
             .switchMap {
                 interactor.changeColor(it.color, it.colorName)
-            }
+            }.share()
 
         val intents = colorChange.scan(currentState, this::stateRedecuer)
 
         subscribeViewState(intents, ColorView::render)
+
+        compositeDisposable.add(colorChange.filter {state->
+            state is ColorPartialState.SuccessfulChange
+        }.subscribe({
+            openSettingsScreenCallback?.invoke()
+        },{
+
+        }))
+
     }
 
     private fun stateRedecuer(previousState: ColorViewState, partialState: ColorPartialState): ColorViewState{
@@ -37,5 +47,6 @@ class ColorPresenter @Inject constructor(private val interactor: ColorInteractor
     override fun unbindIntents() {
         super.unbindIntents()
         compositeDisposable.dispose()
+        openSettingsScreenCallback = null
     }
 }

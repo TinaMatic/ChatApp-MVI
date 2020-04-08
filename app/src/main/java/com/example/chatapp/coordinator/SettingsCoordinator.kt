@@ -17,4 +17,12 @@ class SettingsCoordinator @Inject constructor(private val navigator: Navigator){
     fun openChangeName(){
         navigator.showChangeNameScreen()
     }
+
+    fun openGallery(){
+        navigator.showGallery()
+    }
+
+    fun openSettings(){
+        navigator.showSettingsScreen()
+    }
 }

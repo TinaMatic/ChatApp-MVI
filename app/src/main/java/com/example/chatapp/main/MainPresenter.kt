@@ -28,6 +28,11 @@ class MainPresenter @Inject constructor (private val interactor: MainInteractor,
             .switchMap {
                 interactor.openCreateAccount()
             }
+
+//        val isLoggedIn = intent(MainView::isLoggedIn)
+//            .switchMap {
+//                interactor.isUserLoggedIn()
+//            }
 //            intent(MainView::openCreateNewAccount).flatMap { Observable.just( MainPartialState.OpenCreateAccount, MainPartialState.InitialState) }
 
         val intents = Observable.merge(loginIntent, openCreateAccountIntent)
@@ -58,7 +63,8 @@ class MainPresenter @Inject constructor (private val interactor: MainInteractor,
     private fun stateReducer(previousState: MainViewState, partialState: MainPartialState): MainViewState{
         currentState = when(partialState){
             is MainPartialState.Loading -> previousState.copy(isLoading = true)
-            is MainPartialState.InitialState -> MainViewState()
+            is MainPartialState.InitialState -> previousState.copy(loginMessage = "Not Signed In")
+//            is MainPartialState.IsLoggedIn -> previousState.copy(isLoggedIn = partialState.isLoggedIn, loginMessage = partialState.loginMessage)
             else -> previousState.copy()
         }
 

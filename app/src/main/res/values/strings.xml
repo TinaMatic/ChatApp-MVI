@@ -19,7 +19,10 @@
     <!--    General messages-->
     <string name="error_message">Something went wrong</string>
 
-    <!--    Toast messages-->
+    <!--    Main screen-->
+    <string name="not_logged_in">Not Signed In</string>
+
+    <!--    Main toast messages-->
     <string name="login_failed">Failed to login</string>
     <string name="create_account_failed">Failed to create account</string>
     <string name="email_mandatory">Email is mandatory</string>
@@ -30,6 +33,9 @@
     <string name="logout_item">Logout</string>
     <string name="settings_item">Settings</string>
 
+    <!--    Change picture-->
+    <string name="successful_picture_change">Profile image saved</string>
+    <string name="error_picture_change">Profile image not saved</string>
 
     <!--    Color change screen-->
     <string name="successful_color_change">Color was successfully changed to </string>
@@ -38,5 +44,13 @@
     <!--    Status change screen-->
     <string name="successful_status_change">Status updated successfully</string>
     <string name="error_status_change">Status NOT updated</string>
+
+    <!--    Name change screen-->
+    <string name="successful_name_change">Name was updated successfully</string>
+    <string name="error_name_change">Name was NOT updated</string>
+
+    <!--    Chat screen-->
+    <string name="successful_edit_message">Message was updated successfully</string>
+    <string name="error_edit_message">Message was NOT updated</string>
 
 </resources>

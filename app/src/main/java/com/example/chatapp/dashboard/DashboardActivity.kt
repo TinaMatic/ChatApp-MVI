@@ -30,9 +30,13 @@ class DashboardActivity : MviActivity<DashboardView, DashboardPresenter>(), Dash
     @Inject
     lateinit var interactor: DashboardInteractor
 
-    override val logout: PublishSubject<DashboardIntent.Logout> = PublishSubject.create()
+    override val logout: PublishSubject<Unit> = PublishSubject.create()
 
-    override val openSettings: PublishSubject<DashboardIntent.OpenSettings> = PublishSubject.create()
+    override val openSettings: PublishSubject<Unit> = PublishSubject.create()
+
+    override fun createPresenter(): DashboardPresenter {
+        return DashboardPresenter(interactor, dashboardCoordinator::openSettings, dashboardCoordinator::openMainScreen)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as ChatAppApplication).getChatAppComponent().inject(this)
@@ -47,10 +51,6 @@ class DashboardActivity : MviActivity<DashboardView, DashboardPresenter>(), Dash
         mainTabs.setTabTextColors(Color.WHITE, Color.BLUE)
     }
 
-    override fun createPresenter(): DashboardPresenter {
-        return DashboardPresenter(interactor, dashboardCoordinator::openSettings, dashboardCoordinator::openMainScreen)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
 
@@ -61,13 +61,10 @@ class DashboardActivity : MviActivity<DashboardView, DashboardPresenter>(), Dash
 
         if(item != null){
             if(item.itemId == R.id.logut){
-                logout.onNext(DashboardIntent.Logout)
-//                FirebaseAuth.getInstance().signOut()
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
+                logout.onNext(Unit)
             }
             if(item.itemId == R.id.settings){
-                openSettings.onNext(DashboardIntent.OpenSettings)
+                openSettings.onNext(Unit)
             }
         }
 

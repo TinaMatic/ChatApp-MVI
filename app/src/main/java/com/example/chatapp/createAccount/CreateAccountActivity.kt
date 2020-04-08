@@ -28,6 +28,16 @@ class CreateAccountActivity : MviActivity<CreateAccountView, CreateAccountPresen
     @Inject
     lateinit var loginCoordinator: LoginCoordinator
 
+    override fun loadPage(): Observable<Unit> = Observable.fromCallable { Unit }
+
+    override fun createAccount(): Observable<CreateAccountIntent.CreateAccount> =
+        btnAccountCreate.clicks().throttleFirst(500, TimeUnit.MILLISECONDS)
+            .map { CreateAccountIntent.CreateAccount(etAccountDisplayName.text.toString(), etAccountEmail.text.toString(), etAccountPassword.text.toString()) }
+
+    override fun createPresenter(): CreateAccountPresenter {
+        return CreateAccountPresenter(interactor, loginCoordinator::openDashboard)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as ChatAppApplication).getChatAppComponent().inject(this)
         super.onCreate(savedInstanceState)
@@ -35,16 +45,6 @@ class CreateAccountActivity : MviActivity<CreateAccountView, CreateAccountPresen
 
         navigator.activity = this
     }
-
-    override fun createPresenter(): CreateAccountPresenter {
-        return CreateAccountPresenter(interactor, loginCoordinator::openDashboard)
-    }
-
-    override fun loadPage(): Observable<CreateAccountIntent.LoadPage> = Observable.just(CreateAccountIntent.LoadPage)
-
-    override fun createAccount(): Observable<CreateAccountIntent.CreateAccount> =
-        btnAccountCreate.clicks().throttleFirst(500, TimeUnit.MILLISECONDS)
-            .map { CreateAccountIntent.CreateAccount(etAccountDisplayName.text.toString(), etAccountEmail.text.toString(), etAccountPassword.text.toString()) }
 
     override fun render(state: CreateAccountViewState) {
 
