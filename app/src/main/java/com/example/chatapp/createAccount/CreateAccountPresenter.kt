@@ -21,26 +21,19 @@ class CreateAccountPresenter @Inject constructor(val interactor: CreateAccountIn
         val createAccount = intent(CreateAccountView::createAccount)
             .switchMap {
                 interactor.createAccount(it.email, it.password, it.name)
-            }
-            .doOnNext {
-                if (it is CreateAccountPartialState.CreateAccountSuccess){
-                    openDashboardScreenCallback!!()
-                }
-            }
-
-        val sharedState = createAccount.share()
+            }.share()
 
         val viewState = createAccount.scan(currentState, this::stateReducer)
 
         subscribeViewState(viewState, CreateAccountView::render)
 
-//        compositeDisposable.add(sharedState.filter {state: CreateAccountPartialState->
-//            state is CreateAccountPartialState.CreateAccountSuccess
-//        }.subscribe({
-//            openDashboardScreenCallback!!()
-//        },{
-//            Log.d("Error opening dashboard", it.toString())
-//        }))
+        compositeDisposable.add(createAccount.filter {state->
+            state is CreateAccountPartialState.CreateAccountSuccess
+        }.subscribe({
+            openDashboardScreenCallback?.invoke()
+        },{
+            Log.d("Error opening dashboard", it.toString())
+        }))
     }
 
     private fun stateReducer(previousState: CreateAccountViewState, partialState: CreateAccountPartialState): CreateAccountViewState{

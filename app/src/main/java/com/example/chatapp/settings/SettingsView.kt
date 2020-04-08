@@ -2,6 +2,8 @@ package com.example.chatapp.settings
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 
 interface SettingsView: MvpView {
 
@@ -13,7 +15,12 @@ interface SettingsView: MvpView {
     /**
      * Open Gallery to change picture
      */
-    fun changePicture(): Observable<Unit>
+    fun openGallery(): Observable<Unit>
+
+    /**
+     * Change picture
+     */
+    val changePicture: BehaviorSubject<SettingsIntent.ChangePicture>
 
     /**
      * Open change color screen

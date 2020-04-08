@@ -21,22 +21,21 @@ class DashboardPresenter @Inject constructor(val interactor: DashboardInteractor
         val logout = intent(DashboardView::logout)
             .switchMap {
                 interactor.logout()
-            }
-            .doOnNext{
-                if( it is DashboardPartialState.LogoutSuccess){
-                    openMainScreenCallback!!()
-                }
-            }
+            }.share()
 
         val viewStates = logout.scan(currentState, this::stateReducer)
 
         subscribeViewState(viewStates, DashboardView::render)
 
+        compositeDisposable.add(logout.filter {state->
+            state is DashboardPartialState.LogoutSuccess
+        }.subscribe({
+            openMainScreenCallback?.invoke()
+        },{}))
+
         compositeDisposable.add(intent(DashboardView::openSettings).subscribe {
-            openSettingsScreenCallback!!()
+            openSettingsScreenCallback?.invoke()
         })
-
-
     }
 
     private fun stateReducer(previousState: DashboardViewState, partialState: DashboardPartialState): DashboardViewState{
@@ -45,7 +44,6 @@ class DashboardPresenter @Inject constructor(val interactor: DashboardInteractor
            is DashboardPartialState.Error -> previousState.copy(errorMessage = previousState.errorMessage)
            else -> currentState.copy(isLoading = false)
        }
-
         return currentState
     }
 

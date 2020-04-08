@@ -5,7 +5,9 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class StatusPresenter @Inject constructor(private val interactor: StatusInteractor) : MviBasePresenter<StatusView, StatusViewState>() {
+class StatusPresenter @Inject constructor(private val interactor: StatusInteractor,
+                                          private var openSettingsScreenCallback:(() -> Unit)?)
+    : MviBasePresenter<StatusView, StatusViewState>() {
 
     lateinit var compositeDisposable: CompositeDisposable
 
@@ -22,14 +24,18 @@ class StatusPresenter @Inject constructor(private val interactor: StatusInteract
 
         val changeStatus = intent(StatusView::changeStatus).switchMap {
             interactor.changeStaus(it.status!!)
-        }
+        }.share()
 
         val intents = Observable.merge(loadInitialData, changeStatus)
             .scan(currentState, this::stateReducer)
 
         subscribeViewState(intents, StatusView::render)
 
-
+        compositeDisposable.add(changeStatus.filter { state->
+            state is StatusPartialState.SuccessfulStatusChange
+        }.subscribe({
+            openSettingsScreenCallback?.invoke()
+        },{}))
     }
 
     private fun stateReducer(previousState: StatusViewState, partialState: StatusPartialState): StatusViewState{
@@ -44,5 +50,6 @@ class StatusPresenter @Inject constructor(private val interactor: StatusInteract
     override fun unbindIntents() {
         super.unbindIntents()
         compositeDisposable.dispose()
+        openSettingsScreenCallback = null
     }
 }
