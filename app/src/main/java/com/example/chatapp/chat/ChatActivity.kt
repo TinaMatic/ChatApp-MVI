@@ -218,4 +218,8 @@ class ChatActivity : MviActivity<ChatView, ChatPresenter>(), ChatView, ChatAdapt
         clickedMessageText = message
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }

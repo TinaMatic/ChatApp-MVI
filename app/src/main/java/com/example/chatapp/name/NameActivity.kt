@@ -62,4 +62,9 @@ class NameActivity : MviActivity<NameView, NamePresenter>(), NameView{
             Toast.makeText(this, state.error, Toast.LENGTH_SHORT).show()
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }
