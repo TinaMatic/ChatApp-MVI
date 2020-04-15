@@ -80,4 +80,9 @@ class ColorActivity : MviActivity<ColorView, ColorPresenter>(), ColorView {
         setResult(Activity.RESULT_OK)
         finish()
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }
