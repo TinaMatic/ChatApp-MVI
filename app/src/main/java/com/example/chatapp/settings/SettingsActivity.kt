@@ -147,4 +147,9 @@ class SettingsActivity : MviActivity<SettingsView, SettingsPresenter>(), Setting
             .placeholder(R.drawable.profile_img)
             .into(settingsProfileID)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }

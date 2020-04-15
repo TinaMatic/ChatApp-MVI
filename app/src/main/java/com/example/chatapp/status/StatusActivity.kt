@@ -61,4 +61,9 @@ class StatusActivity : MviActivity<StatusView, StatusPresenter>(), StatusView {
             Toast.makeText(this, state.errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }

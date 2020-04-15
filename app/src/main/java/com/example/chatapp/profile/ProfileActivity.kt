@@ -73,4 +73,9 @@ class ProfileActivity : MviActivity<ProfileView, ProfilePresenter>(), ProfileVie
             .placeholder(R.drawable.happy_woman)
             .into(ivProfilePicture)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }
